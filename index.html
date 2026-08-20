@@ -159,7 +159,6 @@
     td.cell-passed { background-color: rgba(34, 197, 94, 0.25) !important; color: #4ade80; font-weight: bold; }
     td.cell-failed { background-color: rgba(239, 68, 68, 0.25) !important; color: #f87171; font-weight: bold; }
 
-    /* Priority Rows */
     tr.issue-row { transition: background-color 0.3s ease; }
     tr.issue-low { background-color: rgba(34, 197, 94, 0.25) !important; }
     tr.issue-medium { background-color: rgba(251, 146, 60, 0.25) !important; }
@@ -241,7 +240,6 @@
   <div class="content">
     <div class="card">
       
-      <!-- Metadata -->
       <div class="grid-2">
         <div class="field-group">
           <label>Product Coordinator</label>
@@ -278,7 +276,6 @@
         • <strong>N/A</strong> — Not applicable to this game/release
       </div>
 
-      <!-- Section 1 -->
       <div class="section-header">
         <span>1. Game Information & Configuration (70% Weight Overall)</span>
         <button class="btn-sm btn-add btn-action" onclick="addQaItemRow('sec1')">+ Add Item</button>
@@ -298,7 +295,6 @@
         <tbody id="sec1-body"></tbody>
       </table>
 
-      <!-- Section 2 -->
       <div class="section-header">
         <span>2. New Games Release (30% Weight Overall)</span>
         <button class="btn-sm btn-add btn-action" onclick="addQaItemRow('sec2')">+ Add Item</button>
@@ -318,7 +314,6 @@
         <tbody id="sec2-body"></tbody>
       </table>
 
-      <!-- Dynamic Scoring -->
       <div class="score-box">
         <div>
           <strong style="color: #f8fafc;">Final QA Score Threshold:</strong> <span style="color: #94a3b8;">70.00% to Pass</span><br>
@@ -332,7 +327,6 @@
         </div>
       </div>
 
-      <!-- Issues Table -->
       <div class="section-header">
         <span>Issues / Corrective Actions</span>
         <button class="btn-sm btn-add btn-action" onclick="addIssueRow()">+ Add Issue</button>
@@ -351,7 +345,6 @@
         <tbody id="issues-body"></tbody>
       </table>
 
-      <!-- Sign-off Section -->
       <div class="grid-2" style="margin-top: 20px;">
         <div class="field-group">
           <label>QA Completed By</label>
@@ -376,7 +369,6 @@
     </div>
   </div>
 
-  <!-- FIREBASE INTEGRATION WITH PERMISSION CONTROLS -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
     import { getDatabase, ref, set, onValue, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
@@ -433,19 +425,15 @@
       
       onValue(currentDocRef, (snapshot) => {
         const data = snapshot.val();
+        isRemoteUpdate = true;
         if (data && Object.keys(data).length > 0) {
-          const activeTag = document.activeElement ? document.activeElement.tagName : '';
-          if (activeTag === 'INPUT' || activeTag === 'SELECT') return;
-
-          isRemoteUpdate = true;
           setFormData(data);
-          applyPermissionUi();
-          showSaveToast();
-          isRemoteUpdate = false;
         } else {
           setFormData({});
-          applyPermissionUi();
         }
+        applyPermissionUi();
+        showSaveToast();
+        isRemoteUpdate = false;
       });
     }
 
@@ -457,6 +445,7 @@
     listenToRoom(roomId);
 
     window.syncToFirebase = function() {
+      calculateScore(); 
       if (isRemoteUpdate || !currentDocRef || !canEdit) return;
       
       clearTimeout(syncTimer);
@@ -850,7 +839,6 @@
           </tr>
           <tr><td colspan="8"></td></tr>
           
-          <!-- Metadata -->
           <tr><td class="bold">Product Coordinator:</td><td colspan="7">${data.productCoordinator || ''}</td></tr>
           <tr><td class="bold">Game Name:</td><td colspan="7">${data.gameName || ''}</td></tr>
           <tr><td class="bold">Game ID / Game Name:</td><td colspan="7">${data.gameId || ''}</td></tr>
@@ -858,14 +846,12 @@
           <tr><td class="bold">QA Date:</td><td colspan="7">${data.qaDate || ''}</td></tr>
           <tr><td colspan="8"></td></tr>
 
-          <!-- Legend -->
           <tr><td colspan="8" class="bold">Status Legend</td></tr>
           <tr><td colspan="8" class="legend">Passed — Requirement completed and verified</td></tr>
           <tr><td colspan="8" class="legend">Failed — Requirement is incomplete, incorrect, or has an issue</td></tr>
           <tr><td colspan="8" class="legend">N/A — Not applicable to this game/release</td></tr>
           <tr><td colspan="8"></td></tr>
 
-          <!-- Section 1 -->
           <tr><td colspan="8" class="section-title">1. Game Information &amp; Configuration — 70% Weight</td></tr>
           <tr class="header-label">
             <td colspan="2">QA Item</td>
@@ -892,7 +878,6 @@
 
       html += `
           <tr><td colspan="8"></td></tr>
-          <!-- Section 2 -->
           <tr><td colspan="8" class="section-title">2. New Games Release — 30% Weight</td></tr>
           <tr class="header-label">
             <td colspan="2">QA Item</td>
@@ -924,13 +909,11 @@
           <tr><td colspan="8" class="bold">Final QA Score: ${scoreNum} / 100</td></tr>
           <tr><td colspan="8"></td></tr>
 
-          <!-- Overall Result -->
           <tr><td colspan="8" class="bold">Overall Result:</td></tr>
           <tr><td colspan="8">${isPassed ? '☑' : '☐'} Passed — Meets the required QA threshold</td></tr>
           <tr><td colspan="8">${!isPassed ? '☑' : '☐'} Failed — Requires correction/retesting</td></tr>
           <tr><td colspan="8"></td></tr>
 
-          <!-- Issues -->
           <tr><td colspan="8" class="section-title">Issues / Corrective Actions</td></tr>
           <tr class="header-label">
             <td colspan="2">Issue</td>
@@ -959,7 +942,6 @@
 
       html += `
           <tr><td colspan="8"></td></tr>
-          <!-- Sign-off -->
           <tr><td class="bold">QA Completed By:</td><td colspan="3">${data.qaCompletedBy || ''}</td><td class="bold">Date:</td><td colspan="3">${data.qaCompletedDate || ''}</td></tr>
           <tr><td class="bold">Reviewed / Approved By:</td><td colspan="3">${data.qaApprovedBy || ''}</td><td class="bold">Date:</td><td colspan="3">${data.qaApprovedDate || ''}</td></tr>
         </table>
