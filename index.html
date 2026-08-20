@@ -30,7 +30,7 @@
 
     h1 { margin: 0; font-size: 15px; font-weight: 600; color: #f8fafc; letter-spacing: 0.3px; }
 
-    .header-controls { display: flex; align-items: center; gap: 10px; }
+    .header-controls { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
 
     .btn {
       background: #3b82f6;
@@ -53,6 +53,12 @@
 
     .btn-share { background: #8b5cf6; }
     .btn-share:hover { background: #7c3aed; }
+
+    .btn-clear { background: #f59e0b; color: #fff; }
+    .btn-clear:hover { background: #d97706; }
+
+    .btn-delete-eval { background: #ef4444; color: #fff; }
+    .btn-delete-eval:hover { background: #dc2626; }
 
     .btn-today {
       background: #334155;
@@ -102,7 +108,7 @@
     select:focus, input:focus { border-color: #3b82f6; box-shadow: 0 0 0 1px #3b82f6; }
 
     .select-history {
-      width: 220px;
+      width: 200px;
       background-color: #1e293b;
       border-color: #475569;
     }
@@ -144,6 +150,22 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
+    }
+
+    .section-title-input {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      background: transparent;
+      border: 1px dashed #475569;
+      padding: 4px 8px;
+      border-radius: 4px;
+      width: 80%;
+    }
+    .section-title-input:focus {
+      background: #0f172a;
+      border-style: solid;
     }
 
     table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
@@ -232,6 +254,8 @@
       </select>
 
       <button class="btn btn-action" onclick="createNewEvaluation()">+ New</button>
+      <button class="btn btn-clear btn-action" onclick="clearFormResults()">🧹 Clear Results</button>
+      <button class="btn btn-delete-eval btn-action" onclick="deleteCurrentEvaluation()">🗑️ Delete</button>
       <button class="btn btn-share" onclick="copyShareableLink()">🔗 Copy View-Only Link</button>
       <button class="btn btn-excel" onclick="exportToExcel()">📊 Export to Excel</button>
     </div>
@@ -276,8 +300,9 @@
         • <strong>N/A</strong> — Not applicable to this game/release
       </div>
 
+      <!-- Editable Section 1 Header -->
       <div class="section-header">
-        <span>1. Game Information & Configuration (70% Weight Overall)</span>
+        <input type="text" id="sec1Title" class="section-title-input" value="1. Game Information & Configuration (70% Weight Overall)" oninput="syncToFirebase()">
         <button class="btn-sm btn-add btn-action" onclick="addQaItemRow('sec1')">+ Add Item</button>
       </div>
       <table>
@@ -295,8 +320,9 @@
         <tbody id="sec1-body"></tbody>
       </table>
 
+      <!-- Editable Section 2 Header -->
       <div class="section-header">
-        <span>2. New Games Release (30% Weight Overall)</span>
+        <input type="text" id="sec2Title" class="section-title-input" value="2. New Games Release (30% Weight Overall)" oninput="syncToFirebase()">
         <button class="btn-sm btn-add btn-action" onclick="addQaItemRow('sec2')">+ Add Item</button>
       </div>
       <table>
@@ -328,7 +354,7 @@
       </div>
 
       <div class="section-header">
-        <span>Issues / Corrective Actions</span>
+        <span style="font-size: 13px; font-weight: 700; color: #f1f5f9;">Issues / Corrective Actions</span>
         <button class="btn-sm btn-add btn-action" onclick="addIssueRow()">+ Add Issue</button>
       </div>
       <table>
@@ -371,7 +397,7 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getDatabase, ref, set, onValue, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+    import { getDatabase, ref, set, remove, onValue, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAKYnRgNDRPP6lXfyNJclqUHnWMmAIqUJ8",
@@ -481,6 +507,48 @@
       window.syncToFirebase();
     };
 
+    window.clearFormResults = function() {
+      if (!canEdit) return;
+      if (confirm('Are you sure you want to clear all form entries and reset scores?')) {
+        // Clear all text & date inputs
+        document.querySelectorAll('input[type="text"], input[type="date"], input[type="number"]').forEach(el => {
+          if (el.id !== 'sec1Title' && el.id !== 'sec2Title') {
+            el.value = '';
+          }
+        });
+
+        // Uncheck all radio buttons
+        document.querySelectorAll('input[type="radio"]').forEach(radio => radio.checked = false);
+
+        // Reset selects
+        document.querySelectorAll('select.issue-field').forEach(select => select.value = '');
+
+        // Clear section table visual highlight styles
+        document.querySelectorAll('tr').forEach(row => {
+          row.classList.remove('passed-row', 'failed-row', 'issue-low', 'issue-medium', 'issue-high', 'issue-critical');
+        });
+        document.querySelectorAll('td').forEach(cell => {
+          cell.classList.remove('cell-passed', 'cell-failed');
+        });
+
+        window.syncToFirebase();
+      }
+    };
+
+    window.deleteCurrentEvaluation = function() {
+      if (!canEdit) return;
+      if (confirm('Are you sure you want to PERMANENTLY DELETE this evaluation?')) {
+        remove(ref(db, 'checklists/' + roomId));
+        remove(ref(db, 'evaluationsIndex/' + roomId));
+        
+        const newRoomId = 'qa_' + Math.random().toString(36).substring(2, 9);
+        window.history.pushState({}, '', `?id=${newRoomId}&edit=true`);
+        listenToRoom(newRoomId);
+        setFormData({});
+        alert('Evaluation deleted successfully.');
+      }
+    };
+
     window.copyShareableLink = function() {
       const viewUrl = `${window.location.origin}${window.location.pathname}?id=${roomId}`;
       navigator.clipboard.writeText(viewUrl).then(() => {
@@ -504,6 +572,9 @@
   </script>
 
   <script>
+    const defaultSec1Title = "1. Game Information & Configuration (70% Weight Overall)";
+    const defaultSec2Title = "2. New Games Release (30% Weight Overall)";
+
     const defaultSec1Items = [
       { id: 's1_1', text: 'Game Name', weight: 5 },
       { id: 's1_2', text: 'Game ID', weight: 15 },
@@ -726,6 +797,8 @@
         qaCompletedDate: document.getElementById('qaCompletedDate').value,
         qaApprovedBy: document.getElementById('qaApprovedBy').value,
         qaApprovedDate: document.getElementById('qaApprovedDate').value,
+        sec1Title: document.getElementById('sec1Title').value,
+        sec2Title: document.getElementById('sec2Title').value,
         sec1Items: [],
         sec2Items: [],
         issuesList: [],
@@ -773,6 +846,9 @@
       document.getElementById('qaCompletedDate').value = data.qaCompletedDate || '';
       document.getElementById('qaApprovedBy').value = data.qaApprovedBy || '';
       document.getElementById('qaApprovedDate').value = data.qaApprovedDate || '';
+
+      document.getElementById('sec1Title').value = data.sec1Title || defaultSec1Title;
+      document.getElementById('sec2Title').value = data.sec2Title || defaultSec2Title;
 
       document.getElementById('sec1-body').innerHTML = '';
       document.getElementById('sec2-body').innerHTML = '';
@@ -829,12 +905,12 @@
           <tr>
             <td colspan="4" class="title">QA Checklist — Roadmap: New Games Release</td>
             <td class="bold center">QA Score</td>
-            <td colspan="2" class="bold">1. Game Information &amp; Configuration — 70%</td>
+            <td colspan="2" class="bold">${data.sec1Title}</td>
             <td class="bold center">${scoreNum}%</td>
           </tr>
           <tr>
             <td colspan="5"></td>
-            <td colspan="2" class="bold">2. New Games Release — 30%</td>
+            <td colspan="2" class="bold">${data.sec2Title}</td>
             <td></td>
           </tr>
           <tr><td colspan="8"></td></tr>
@@ -852,7 +928,7 @@
           <tr><td colspan="8" class="legend">N/A — Not applicable to this game/release</td></tr>
           <tr><td colspan="8"></td></tr>
 
-          <tr><td colspan="8" class="section-title">1. Game Information &amp; Configuration — 70% Weight</td></tr>
+          <tr><td colspan="8" class="section-title">${data.sec1Title}</td></tr>
           <tr class="header-label">
             <td colspan="2">QA Item</td>
             <td>Weight</td>
@@ -878,7 +954,7 @@
 
       html += `
           <tr><td colspan="8"></td></tr>
-          <tr><td colspan="8" class="section-title">2. New Games Release — 30% Weight</td></tr>
+          <tr><td colspan="8" class="section-title">${data.sec2Title}</td></tr>
           <tr class="header-label">
             <td colspan="2">QA Item</td>
             <td>Weight</td>
