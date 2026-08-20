@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QA Checklist - Roadmap: New Games Release</title>
+  <style>
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    
+    body {
+      margin: 0;
+      background-color: #0f172a;
+      color: #e2e8f0;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    header {
+      background: #1e293b;
+      border-bottom: 1px solid #334155;
+      padding: 10px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f8fafc;
+      letter-spacing: 0.3px;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .btn {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.2s;
+    }
+    .btn:hover { background: #2563eb; }
+    
+    .btn-excel { background: #10b981; }
+    .btn-excel:hover { background: #059669; }
+
+    .btn-share { background: #8b5cf6; }
+    .btn-share:hover { background: #7c3aed; }
+
+    .btn-danger { background: #ef4444; padding: 6px 10px; }
+    .btn-danger:hover { background: #dc2626; }
+
+    .btn-today {
+      background: #334155;
+      color: #cbd5e1;
+      padding: 4px 8px;
+      font-size: 10px;
+      border-radius: 3px;
+      white-space: nowrap;
+      border: none;
+      cursor: pointer;
+    }
+    .btn-today:hover { background: #475569; color: #fff; }
+
+    /* Compact Buttons */
+    .btn-sm {
+      padding: 3px 8px;
+      font-size: 10px;
+      border-radius: 3px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s;
+    }
+    .btn-add {
+      background: #3b82f6;
+      color: #fff;
+    }
+    .btn-add:hover { background: #2563eb; }
+
+    .btn-del {
+      background: #ef4444;
+      color: #fff;
+      padding: 2px 6px;
+    }
+    .btn-del:hover { background: #dc2626; }
+
+    select, input[type="text"], input[type="number"], input[type="date"] {
+      background-color: #0f172a;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 6px 10px;
+      border-radius: 4px;
+      font-size: 11px;
+      outline: none;
+      width: 100%;
+    }
+
+    input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="date"] {
+      cursor: pointer;
+      color-scheme: dark;
+    }
+
+    input[type="date"]::-webkit-calendar-picker-indicator {
+      filter: invert(1);
+      cursor: pointer;
+      padding: 2px;
+    }
+
+    select:focus, input:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 1px #3b82f6;
+    }
+
+    .select-history {
+      width: 220px;
+      background-color: #1e293b;
+      border-color: #475569;
+    }
+
+    .date-wrapper {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .content {
+      flex: 1;
+      padding: 16px;
+      max-width: 1100px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .card {
+      background: #1e293b;
+      border-radius: 6px;
+      padding: 20px;
+      border: 1px solid #334155;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+    }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+
+    .field-group { display: flex; flex-direction: column; }
+    .field-group label { font-size: 11px; font-weight: 600; color: #94a3b8; margin-bottom: 4px; }
+
+    .legend {
+      background: #0f172a;
+      padding: 10px 12px;
+      border-radius: 4px;
+      font-size: 11px;
+      color: #94a3b8;
+      margin-bottom: 16px;
+      border-left: 3px solid #3b82f6;
+    }
+
+    .section-header {
+      font-size: 13px;
+      font-weight: 700;
+      color: #f1f5f9;
+      margin: 20px 0 10px 0;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+    th, td { border: 1px solid #334155; padding: 6px 10px; text-align: left; font-size: 11px; }
+    th { background: #0f172a; font-weight: 600; color: #94a3b8; }
+
+    .radio-cell { text-align: center; width: 65px; transition: background 0.2s; }
+    .radio-cell input { cursor: pointer; accent-color: #3b82f6; }
+
+    tr.passed-row { background-color: rgba(34, 197, 94, 0.08); }
+    tr.failed-row { background-color: rgba(239, 68, 68, 0.08); }
+
+    td.cell-passed { background-color: rgba(34, 197, 94, 0.25) !important; color: #4ade80; font-weight: bold; }
+    td.cell-failed { background-color: rgba(239, 68, 68, 0.25) !important; color: #f87171; font-weight: bold; }
+
+    /* Issue Priority Row Styles */
+    tr.issue-row { transition: background-color 0.3s ease; }
+
+    tr.issue-low { background-color: rgba(34, 197, 94, 0.25) !important; }
+    tr.issue-medium { background-color: rgba(251, 146, 60, 0.25) !important; }
+    tr.issue-high { background-color: rgba(239, 68, 68, 0.3) !important; }
+    tr.issue-critical { animation: blink-red 1.2s infinite alternate; }
+
+    @keyframes blink-red {
+      0% { background-color: rgba(239, 68, 68, 0.15); }
+      100% { background-color: rgba(239, 68, 68, 0.65); }
+    }
+
+    /* Score Box Layout */
+    .score-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 6px;
+      padding: 14px 18px;
+      margin-top: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Pass/Fail Status Banner Text */
+    .status-banner {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .status-banner.pass-text { color: #22c55e; }
+    .status-banner.fail-text { color: #ef4444; }
+
+    .score-display {
+      font-size: 20px;
+      font-weight: 800;
+      padding: 6px 16px;
+      border-radius: 4px;
+      background: #1e293b;
+      border: 1px solid #334155;
+    }
+
+    .score-passed { color: #22c55e; border-color: #22c55e; }
+    .score-failed { color: #ef4444; border-color: #ef4444; }
+
+    .toast { font-size: 11px; color: #10b981; font-weight: 600; opacity: 0; transition: opacity 0.3s; }
+    .toast.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <h1>QA Checklist</h1>
+      <span id="save-toast" class="toast">✓ Auto-saved</span>
+    </div>
+
+    <div class="header-controls">
+      <label for="historySelect" style="font-size: 11px; color: #94a3b8;">Previous Evaluations:</label>
+      <select id="historySelect" class="select-history" onchange="loadEvaluation(this.value)">
+        <option value="">-- Select Product Coordinator --</option>
+      </select>
+
+      <button class="btn" onclick="createNewEvaluation()">+ New</button>
+      <button class="btn btn-share" onclick="shareEvaluation()">🔗 Share Link</button>
+      <button class="btn btn-danger" onclick="deleteCurrentEvaluation()" title="Delete Current Evaluation">Delete</button>
+      <button class="btn btn-excel" onclick="exportToExcel()">📊 Export to Excel</button>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="card">
+      
+      <!-- Metadata -->
+      <div class="grid-2">
+        <div class="field-group">
+          <label>Product Coordinator</label>
+          <input type="text" id="productCoordinator" placeholder="Enter coordinator name..." oninput="autoSave(); updateDropdownText();">
+        </div>
+        <div class="field-group">
+          <label>QA Date</label>
+          <div class="date-wrapper">
+            <input type="date" id="qaDate" onchange="autoSave()" onclick="openCalendar(this)">
+            <button class="btn-today" onclick="setToday('qaDate')">Today</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Game Name</label>
+          <input type="text" id="gameName" placeholder="Enter game name..." oninput="autoSave()">
+        </div>
+        <div class="field-group">
+          <label>Game ID / Game Name</label>
+          <input type="text" id="gameId" oninput="autoSave()">
+        </div>
+        <div class="field-group">
+          <label>Release Date</label>
+          <div class="date-wrapper">
+            <input type="date" id="releaseDate" onchange="autoSave()" onclick="openCalendar(this)">
+            <button class="btn-today" onclick="setToday('releaseDate')">Today</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <strong>Status Legend:</strong><br>
+        • <strong>Passed</strong> — Requirement completed and verified<br>
+        • <strong>Failed</strong> — Requirement is incomplete, incorrect, or has an issue<br>
+        • <strong>N/A</strong> — Not applicable to this game/release
+      </div>
+
+      <!-- Section 1 -->
+      <div class="section-header">
+        <span>1. Game Information & Configuration (70% Weight Overall)</span>
+        <button class="btn-sm btn-add" onclick="addQaItemRow('sec1')">+ Add Item</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>QA Item Name</th>
+            <th style="width: 80px;">Weight (%)</th>
+            <th class="radio-cell">Passed</th>
+            <th class="radio-cell">Failed</th>
+            <th class="radio-cell">N/A</th>
+            <th>Notes</th>
+            <th style="width: 35px; text-align: center;"></th>
+          </tr>
+        </thead>
+        <tbody id="sec1-body"></tbody>
+      </table>
+
+      <!-- Section 2 -->
+      <div class="section-header">
+        <span>2. New Games Release (30% Weight Overall)</span>
+        <button class="btn-sm btn-add" onclick="addQaItemRow('sec2')">+ Add Item</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>QA Item Name</th>
+            <th style="width: 80px;">Weight (%)</th>
+            <th class="radio-cell">Passed</th>
+            <th class="radio-cell">Failed</th>
+            <th class="radio-cell">N/A</th>
+            <th>Notes</th>
+            <th style="width: 35px; text-align: center;"></th>
+          </tr>
+        </thead>
+        <tbody id="sec2-body"></tbody>
+      </table>
+
+      <!-- Dynamic Scoring with PASSED! / FAILED! Banner -->
+      <div class="score-box">
+        <div>
+          <strong style="color: #f8fafc;">Final QA Score Threshold:</strong> <span style="color: #94a3b8;">70.00% to Pass</span><br>
+          <small style="color: #64748b;">Formula: Sec 1 (70% Weight) + Sec 2 (30% Weight)</small>
+        </div>
+
+        <!-- Center Status Note -->
+        <div id="status-text" class="status-banner fail-text">FAILED!</div>
+
+        <div class="score-display score-failed" id="score-container">
+          Score: <span id="final-score">0.00</span> / 100
+        </div>
+      </div>
+
+      <!-- Issues Table -->
+      <div class="section-header">
+        <span>Issues / Corrective Actions</span>
+        <button class="btn-sm btn-add" onclick="addIssueRow()">+ Add Issue</button>
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Issue</th>
+            <th style="width: 110px;">Priority</th>
+            <th style="width: 130px;">Owner</th>
+            <th>Action Required</th>
+            <th style="width: 110px;">Retest Status</th>
+            <th style="width: 35px; text-align: center;"></th>
+          </tr>
+        </thead>
+        <tbody id="issues-body"></tbody>
+      </table>
+
+      <!-- Sign-off Section -->
+      <div class="grid-2" style="margin-top: 20px;">
+        <div class="field-group">
+          <label>QA Completed By</label>
+          <input type="text" id="qaCompletedBy" placeholder="Evaluator Name" oninput="autoSave()" style="margin-bottom: 8px;">
+          <label>Date Completed</label>
+          <div class="date-wrapper">
+            <input type="date" id="qaCompletedDate" onchange="autoSave()" onclick="openCalendar(this)">
+            <button class="btn-today" onclick="setToday('qaCompletedDate')">Today</button>
+          </div>
+        </div>
+        <div class="field-group">
+          <label>Reviewed / Approved By</label>
+          <input type="text" id="qaApprovedBy" placeholder="Approver Name" oninput="autoSave()" style="margin-bottom: 8px;">
+          <label>Date Approved</label>
+          <div class="date-wrapper">
+            <input type="date" id="qaApprovedDate" onchange="autoSave()" onclick="openCalendar(this)">
+            <button class="btn-today" onclick="setToday('qaApprovedDate')">Today</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    const defaultSec1Items = [
+      { id: 's1_1', text: 'Game Name', weight: 5 },
+      { id: 's1_2', text: 'Game ID', weight: 15 },
+      { id: 's1_3', text: 'Aggregator', weight: 10 },
+      { id: 's1_4', text: 'Provider', weight: 10 },
+      { id: 's1_5', text: 'Game Information', weight: 10 },
+      { id: 's1_6', text: 'Channels', weight: 10 },
+      { id: 's1_7', text: 'Vertical Type', weight: 10 },
+      { id: 's1_8', text: 'All Games Category', weight: 10 },
+      { id: 's1_9', text: 'Associated Brands', weight: 10 },
+      { id: 's1_10', text: 'Thumbnails', weight: 10 }
+    ];
+
+    const defaultSec2Items = [
+      { id: 's2_1', text: 'Test', weight: 10 },
+      { id: 's2_2', text: 'Max Exposure', weight: 5 },
+      { id: 's2_3', text: 'Escalated the Issue to the Channel', weight: 5 },
+      { id: 's2_4', text: 'Added to Categories', weight: 10 }
+    ];
+
+    let currentId = null;
+    let evaluations = {};
+    let issueCounter = 0;
+    let qaItemCounter = 0;
+
+    function init() {
+      loadFromStorage();
+      
+      // Check for Shared URL Hash
+      if (window.location.hash.startsWith('#data=')) {
+        try {
+          const encoded = window.location.hash.replace('#data=', '');
+          const data = JSON.parse(decodeURIComponent(atob(encoded)));
+          currentId = 'eval_' + Date.now();
+          evaluations[currentId] = data;
+          saveToStorage();
+          window.location.hash = ''; // Clear Hash
+        } catch(e) {
+          console.error("Failed to parse share URL data", e);
+        }
+      }
+
+      if (Object.keys(evaluations).length === 0) {
+        createNewEvaluation();
+      } else {
+        currentId = Object.keys(evaluations)[0];
+        loadEvaluation(currentId);
+      }
+    }
+
+    function openCalendar(inputEl) {
+      if ('showPicker' in HTMLInputElement.prototype) {
+        try { inputEl.showPicker(); } catch(e){}
+      }
+    }
+
+    function setToday(fieldId) {
+      const today = new Date().toISOString().split('T')[0];
+      const field = document.getElementById(fieldId);
+      field.value = today;
+      autoSave();
+    }
+
+    /* --- EDITABLE QA ITEMS logic --- */
+    function addQaItemRow(section, item = {}) {
+      qaItemCounter++;
+      const id = item.id || `${section}_custom_${qaItemCounter}`;
+      const container = document.getElementById(`${section}-body`);
+
+      const tr = document.createElement('tr');
+      tr.id = `row_${id}`;
+      tr.setAttribute('data-sec', section);
+      tr.setAttribute('data-id', id);
+
+      tr.innerHTML = `
+        <td>
+          <input type="text" id="text_${id}" value="${item.text || 'New QA Item'}" oninput="autoSave()">
+        </td>
+        <td>
+          <input type="number" id="weight_${id}" step="0.5" min="0" value="${item.weight !== undefined ? item.weight : 5}" oninput="autoSave()">
+        </td>
+        <td class="radio-cell" id="cell_passed_${id}">
+          <input type="radio" name="${id}" value="passed" ${item.status === 'passed' ? 'checked' : ''} onchange="handleStatusChange('${id}'); autoSave();">
+        </td>
+        <td class="radio-cell" id="cell_failed_${id}">
+          <input type="radio" name="${id}" value="failed" ${item.status === 'failed' ? 'checked' : ''} onchange="handleStatusChange('${id}'); autoSave();">
+        </td>
+        <td class="radio-cell" id="cell_na_${id}">
+          <input type="radio" name="${id}" value="na" ${item.status === 'na' ? 'checked' : ''} onchange="handleStatusChange('${id}'); autoSave();">
+        </td>
+        <td><input type="text" id="${id}_notes" value="${item.notes || ''}" oninput="autoSave()"></td>
+        <td style="text-align: center;">
+          <button class="btn-sm btn-del" onclick="removeQaItemRow('${id}')" title="Delete Row">✕</button>
+        </td>
+      `;
+
+      container.appendChild(tr);
+      handleStatusChange(id);
+      autoSave();
+    }
+
+    function removeQaItemRow(id) {
+      const row = document.getElementById(`row_${id}`);
+      if (row) {
+        row.remove();
+        autoSave();
+      }
+    }
+
+    function handleStatusChange(itemId) {
+      const cellPassed = document.getElementById(`cell_passed_${itemId}`);
+      const cellFailed = document.getElementById(`cell_failed_${itemId}`);
+      const row = document.getElementById(`row_${itemId}`);
+      if (!row) return;
+
+      const selected = document.querySelector(`input[name="${itemId}"]:checked`);
+
+      if (cellPassed) cellPassed.classList.remove('cell-passed');
+      if (cellFailed) cellFailed.classList.remove('cell-failed');
+      row.classList.remove('passed-row', 'failed-row');
+
+      if (selected) {
+        if (selected.value === 'passed' && cellPassed) {
+          cellPassed.classList.add('cell-passed');
+          row.classList.add('passed-row');
+        } else if (selected.value === 'failed' && cellFailed) {
+          cellFailed.classList.add('cell-failed');
+          row.classList.add('failed-row');
+        }
+      }
+    }
+
+    /* --- ISSUE DYNAMIC ROWS & STYLING --- */
+    function addIssueRow(data = {}) {
+      issueCounter++;
+      const id = issueCounter;
+      const tbody = document.getElementById('issues-body');
+      
+      const tr = document.createElement('tr');
+      tr.id = `issue-row-${id}`;
+      tr.className = 'issue-row';
+      tr.innerHTML = `
+        <td><input type="text" class="issue-field" data-id="${id}" data-type="issue" value="${data.issue || ''}" oninput="autoSave()"></td>
+        <td>
+          <select id="prio_${id}" class="issue-field" data-id="${id}" data-type="prio" onchange="updateIssueRowStyle(${id}); autoSave();">
+            <option value="">- Select -</option>
+            <option ${data.prio === 'Low' ? 'selected' : ''}>Low</option>
+            <option ${data.prio === 'Medium' ? 'selected' : ''}>Medium</option>
+            <option ${data.prio === 'High' ? 'selected' : ''}>High</option>
+            <option ${data.prio === 'Critical' ? 'selected' : ''}>Critical</option>
+          </select>
+        </td>
+        <td><input type="text" class="issue-field" data-id="${id}" data-type="owner" value="${data.owner || ''}" oninput="autoSave()"></td>
+        <td><input type="text" class="issue-field" data-id="${id}" data-type="action" value="${data.action || ''}" oninput="autoSave()"></td>
+        <td>
+          <select id="status_${id}" class="issue-field" data-id="${id}" data-type="status" onchange="updateIssueRowStyle(${id}); autoSave();">
+            <option value="">- Select -</option>
+            <option ${data.status === 'Open' ? 'selected' : ''}>Open</option>
+            <option ${data.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
+            <option ${data.status === 'Resolved' ? 'selected' : ''}>Resolved</option>
+          </select>
+        </td>
+        <td style="text-align: center;">
+          <button class="btn-sm btn-del" onclick="removeIssueRow(${id})" title="Delete Issue">✕</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+      updateIssueRowStyle(id);
+    }
+
+    function removeIssueRow(id) {
+      const row = document.getElementById(`issue-row-${id}`);
+      if (row) {
+        row.remove();
+        autoSave();
+      }
+    }
+
+    function updateIssueRowStyle(rowNum) {
+      const row = document.getElementById(`issue-row-${rowNum}`);
+      if (!row) return;
+
+      const prioEl = document.getElementById(`prio_${rowNum}`);
+      const statusEl = document.getElementById(`status_${rowNum}`);
+
+      const priority = prioEl ? prioEl.value : '';
+      const status = statusEl ? statusEl.value : '';
+
+      row.classList.remove('issue-low', 'issue-medium', 'issue-high', 'issue-critical');
+
+      if (status === 'Resolved' || !priority) {
+        return;
+      }
+
+      if (priority === 'Low') row.classList.add('issue-low');
+      else if (priority === 'Medium') row.classList.add('issue-medium');
+      else if (priority === 'High') row.classList.add('issue-high');
+      else if (priority === 'Critical') row.classList.add('issue-critical');
+    }
+
+    function calculateScore() {
+      let sec1Score = calculateSection('sec1');
+      let sec2Score = calculateSection('sec2');
+      
+      let finalScore = (sec1Score * 0.70) + (sec2Score * 0.30);
+      const scoreVal = finalScore.toFixed(2);
+      document.getElementById('final-score').innerText = scoreVal;
+
+      const container = document.getElementById('score-container');
+      const statusText = document.getElementById('status-text');
+
+      if (parseFloat(scoreVal) >= 70.00) {
+        container.className = 'score-display score-passed';
+        statusText.innerText = 'PASSED!';
+        statusText.className = 'status-banner pass-text';
+      } else {
+        container.className = 'score-display score-failed';
+        statusText.innerText = 'FAILED!';
+        statusText.className = 'status-banner fail-text';
+      }
+      return scoreVal;
+    }
+
+    function calculateSection(section) {
+      let passedWeight = 0;
+      let totalApplicableWeight = 0;
+
+      const rows = document.querySelectorAll(`#${section}-body tr`);
+      rows.forEach(tr => {
+        const id = tr.getAttribute('data-id');
+        const weightInput = document.getElementById(`weight_${id}`);
+        const weight = weightInput ? parseFloat(weightInput.value) || 0 : 0;
+        
+        const selected = document.querySelector(`input[name="${id}"]:checked`);
+        if (selected) {
+          if (selected.value === 'passed') {
+            passedWeight += weight;
+            totalApplicableWeight += weight;
+          } else if (selected.value === 'failed') {
+            totalApplicableWeight += weight;
+          }
+        }
+      });
+
+      return totalApplicableWeight > 0 ? (passedWeight / totalApplicableWeight) * 100 : 0;
+    }
+
+    function getFormData() {
+      const data = {
+        productCoordinator: document.getElementById('productCoordinator').value,
+        qaDate: document.getElementById('qaDate').value,
+        gameName: document.getElementById('gameName').value,
+        gameId: document.getElementById('gameId').value,
+        releaseDate: document.getElementById('releaseDate').value,
+        qaCompletedBy: document.getElementById('qaCompletedBy').value,
+        qaCompletedDate: document.getElementById('qaCompletedDate').value,
+        qaApprovedBy: document.getElementById('qaApprovedBy').value,
+        qaApprovedDate: document.getElementById('qaApprovedDate').value,
+        sec1Items: [],
+        sec2Items: [],
+        issuesList: [],
+        updatedAt: new Date().toLocaleDateString()
+      };
+
+      ['sec1', 'sec2'].forEach(section => {
+        const rows = document.querySelectorAll(`#${section}-body tr`);
+        rows.forEach(tr => {
+          const id = tr.getAttribute('data-id');
+          const text = document.getElementById(`text_${id}`).value;
+          const weight = parseFloat(document.getElementById(`weight_${id}`).value) || 0;
+          const notes = document.getElementById(`${id}_notes`).value;
+          const selected = document.querySelector(`input[name="${id}"]:checked`);
+          
+          data[`${section}Items`].push({
+            id,
+            text,
+            weight,
+            status: selected ? selected.value : null,
+            notes
+          });
+        });
+      });
+
+      // Collect Issue Rows
+      const issueRows = document.querySelectorAll('#issues-body tr');
+      issueRows.forEach(tr => {
+        const id = tr.id.replace('issue-row-', '');
+        const issue = tr.querySelector(`[data-type="issue"]`).value;
+        const prio = tr.querySelector(`[data-type="prio"]`).value;
+        const owner = tr.querySelector(`[data-type="owner"]`).value;
+        const action = tr.querySelector(`[data-type="action"]`).value;
+        const status = tr.querySelector(`[data-type="status"]`).value;
+
+        if (issue || prio || owner || action || status) {
+          data.issuesList.push({ issue, prio, owner, action, status });
+        }
+      });
+
+      return data;
+    }
+
+    function setFormData(data) {
+      document.getElementById('productCoordinator').value = data.productCoordinator || '';
+      document.getElementById('qaDate').value = data.qaDate || '';
+      document.getElementById('gameName').value = data.gameName || '';
+      document.getElementById('gameId').value = data.gameId || '';
+      document.getElementById('releaseDate').value = data.releaseDate || '';
+      document.getElementById('qaCompletedBy').value = data.qaCompletedBy || '';
+      document.getElementById('qaCompletedDate').value = data.qaCompletedDate || '';
+      document.getElementById('qaApprovedBy').value = data.qaApprovedBy || '';
+      document.getElementById('qaApprovedDate').value = data.qaApprovedDate || '';
+
+      // Render Section 1 & Section 2
+      document.getElementById('sec1-body').innerHTML = '';
+      document.getElementById('sec2-body').innerHTML = '';
+
+      const sec1 = (data.sec1Items && data.sec1Items.length > 0) ? data.sec1Items : defaultSec1Items;
+      const sec2 = (data.sec2Items && data.sec2Items.length > 0) ? data.sec2Items : defaultSec2Items;
+
+      sec1.forEach(item => addQaItemRow('sec1', item));
+      sec2.forEach(item => addQaItemRow('sec2', item));
+
+      // Render Issues
+      document.getElementById('issues-body').innerHTML = '';
+      issueCounter = 0;
+      if (data.issuesList && data.issuesList.length > 0) {
+        data.issuesList.forEach(iss => addIssueRow(iss));
+      } else {
+        addIssueRow();
+      }
+
+      calculateScore();
+    }
+
+    function autoSave() {
+      if (!currentId) return;
+      evaluations[currentId] = getFormData();
+      saveToStorage();
+      calculateScore();
+      showSaveToast();
+    }
+
+    function createNewEvaluation() {
+      currentId = 'eval_' + Date.now();
+      evaluations[currentId] = {
+        productCoordinator: 'New Coordinator',
+        updatedAt: new Date().toLocaleDateString()
+      };
+      setFormData({});
+      autoSave();
+      renderDropdown();
+    }
+
+    function loadEvaluation(id) {
+      if (!id) return;
+      currentId = id;
+      setFormData(evaluations[id]);
+      renderDropdown();
+    }
+
+    function deleteCurrentEvaluation() {
+      if (!currentId) return;
+      if (confirm('Are you sure you want to delete this evaluation?')) {
+        delete evaluations[currentId];
+        saveToStorage();
+        const keys = Object.keys(evaluations);
+        if (keys.length > 0) {
+          loadEvaluation(keys[0]);
+        } else {
+          createNewEvaluation();
+        }
+      }
+    }
+
+    function shareEvaluation() {
+      const data = getFormData();
+      const jsonString = JSON.stringify(data);
+      const encoded = btoa(encodeURIComponent(jsonString));
+      const shareableUrl = `${window.location.origin}${window.location.pathname}#data=${encoded}`;
+
+      navigator.clipboard.writeText(shareableUrl).then(() => {
+        alert('🔗 Shareable link copied to clipboard!\nAnyone with this link can view and edit this checklist state.');
+      }).catch(err => {
+        prompt('Copy this shareable link:', shareableUrl);
+      });
+    }
+
+    function renderDropdown() {
+      const select = document.getElementById('historySelect');
+      select.innerHTML = '<option value="">-- Select Product Coordinator --</option>';
+      
+      Object.keys(evaluations).reverse().forEach(id => {
+        const item = evaluations[id];
+        const opt = document.createElement('option');
+        opt.value = id;
+        opt.innerText = `${item.productCoordinator || 'Untitled Coordinator'} (${item.updatedAt || ''})`;
+        if (id === currentId) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+
+    function updateDropdownText() {
+      renderDropdown();
+    }
+
+    function showSaveToast() {
+      const toast = document.getElementById('save-toast');
+      toast.classList.add('show');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
+    }
+
+    function saveToStorage() {
+      localStorage.setItem('qa_evaluations_db_dark', JSON.stringify(evaluations));
+    }
+
+    function loadFromStorage() {
+      const stored = localStorage.getItem('qa_evaluations_db_dark');
+      if (stored) {
+        try { evaluations = JSON.parse(stored); } catch(e) { evaluations = {}; }
+      }
+    }
+
+    function exportToExcel() {
+      const data = getFormData();
+      const scoreNum = calculateScore();
+      const isPassed = parseFloat(scoreNum) >= 70.00;
+
+      const getCheck = (itemStatus, checkType) => itemStatus === checkType ? '☑' : '☐';
+
+      let html = `
+      <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body { font-family: Arial, sans-serif; font-size: 11px; }
+          table { border-collapse: collapse; }
+          td, th { border: 1px solid #d1d5db; padding: 4px 8px; vertical-align: middle; }
+          .title { font-weight: bold; font-size: 12px; }
+          .header-label { font-weight: bold; background-color: #f8fafc; }
+          .center { text-align: center; }
+          .bold { font-weight: bold; }
+          .section-title { font-weight: bold; background-color: #f1f5f9; }
+          .legend { font-size: 10px; color: #475569; }
+        </style>
+      </head>
+      <body>
+        <table>
+          <tr>
+            <td colspan="4" class="title">QA Checklist — Roadmap: New Games Release</td>
+            <td class="bold center">QA Score</td>
+            <td colspan="2" class="bold">1. Game Information &amp; Configuration — 70%</td>
+            <td class="bold center">${scoreNum}%</td>
+          </tr>
+          <tr>
+            <td colspan="5"></td>
+            <td colspan="2" class="bold">2. New Games Release — 30%</td>
+            <td></td>
+          </tr>
+          <tr><td colspan="8"></td></tr>
+          
+          <!-- Metadata -->
+          <tr><td class="bold">Product Coordinator:</td><td colspan="7">${data.productCoordinator || ''}</td></tr>
+          <tr><td class="bold">Game Name:</td><td colspan="7">${data.gameName || ''}</td></tr>
+          <tr><td class="bold">Game ID / Game Name:</td><td colspan="7">${data.gameId || ''}</td></tr>
+          <tr><td class="bold">Release Date:</td><td colspan="7">${data.releaseDate || ''}</td></tr>
+          <tr><td class="bold">QA Date:</td><td colspan="7">${data.qaDate || ''}</td></tr>
+          <tr><td colspan="8"></td></tr>
+
+          <!-- Legend -->
+          <tr><td colspan="8" class="bold">Status Legend</td></tr>
+          <tr><td colspan="8" class="legend">Passed — Requirement completed and verified</td></tr>
+          <tr><td colspan="8" class="legend">Failed — Requirement is incomplete, incorrect, or has an issue</td></tr>
+          <tr><td colspan="8" class="legend">N/A — Not applicable to this game/release</td></tr>
+          <tr><td colspan="8"></td></tr>
+
+          <!-- Section 1 -->
+          <tr><td colspan="8" class="section-title">1. Game Information &amp; Configuration — 70% Weight</td></tr>
+          <tr class="header-label">
+            <td colspan="2">QA Item</td>
+            <td>Weight</td>
+            <td class="center">Passed</td>
+            <td class="center">Failed</td>
+            <td class="center">N/A</td>
+            <td colspan="2">Notes</td>
+          </tr>
+      `;
+
+      data.sec1Items.forEach(item => {
+        html += `
+          <tr>
+            <td colspan="2">${item.text}</td>
+            <td>${item.weight.toFixed(2)}%</td>
+            <td class="center">${getCheck(item.status, 'passed')}</td>
+            <td class="center">${getCheck(item.status, 'failed')}</td>
+            <td class="center">${getCheck(item.status, 'na')}</td>
+            <td colspan="2">${item.notes || ''}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          <tr><td colspan="8"></td></tr>
+          <!-- Section 2 -->
+          <tr><td colspan="8" class="section-title">2. New Games Release — 30% Weight</td></tr>
+          <tr class="header-label">
+            <td colspan="2">QA Item</td>
+            <td>Weight</td>
+            <td class="center">Passed</td>
+            <td class="center">Failed</td>
+            <td class="center">N/A</td>
+            <td colspan="2">Notes</td>
+          </tr>
+      `;
+
+      data.sec2Items.forEach(item => {
+        html += `
+          <tr>
+            <td colspan="2">${item.text}</td>
+            <td>${item.weight.toFixed(2)}%</td>
+            <td class="center">${getCheck(item.status, 'passed')}</td>
+            <td class="center">${getCheck(item.status, 'failed')}</td>
+            <td class="center">${getCheck(item.status, 'na')}</td>
+            <td colspan="2">${item.notes || ''}</td>
+          </tr>
+        `;
+      });
+
+      html += `
+          <tr><td colspan="8"></td></tr>
+          <tr><td colspan="8" class="bold">QA Scoring</td></tr>
+          <tr><td colspan="8">Total Weight: 100%</td></tr>
+          <tr><td colspan="8" class="bold">Final QA Score: ${scoreNum} / 100</td></tr>
+          <tr><td colspan="8"></td></tr>
+
+          <!-- Overall Result -->
+          <tr><td colspan="8" class="bold">Overall Result:</td></tr>
+          <tr><td colspan="8">${isPassed ? '☑' : '☐'} Passed — Meets the required QA threshold</td></tr>
+          <tr><td colspan="8">${!isPassed ? '☑' : '☐'} Failed — Requires correction/retesting</td></tr>
+          <tr><td colspan="8"></td></tr>
+
+          <!-- Issues -->
+          <tr><td colspan="8" class="section-title">Issues / Corrective Actions</td></tr>
+          <tr class="header-label">
+            <td colspan="2">Issue</td>
+            <td>Priority</td>
+            <td>Owner</td>
+            <td colspan="2">Action Required</td>
+            <td colspan="2">Retest Status</td>
+          </tr>
+      `;
+
+      if (data.issuesList && data.issuesList.length > 0) {
+        data.issuesList.forEach(iss => {
+          html += `
+            <tr>
+              <td colspan="2">${iss.issue || ''}</td>
+              <td>${iss.prio || ''}</td>
+              <td>${iss.owner || ''}</td>
+              <td colspan="2">${iss.action || ''}</td>
+              <td colspan="2">${iss.status || ''}</td>
+            </tr>
+          `;
+        });
+      } else {
+        html += `<tr><td colspan="8">No issues logged.</td></tr>`;
+      }
+
+      html += `
+          <tr><td colspan="8"></td></tr>
+          <!-- Sign-off -->
+          <tr><td class="bold">QA Completed By:</td><td colspan="3">${data.qaCompletedBy || ''}</td><td class="bold">Date:</td><td colspan="3">${data.qaCompletedDate || ''}</td></tr>
+          <tr><td class="bold">Reviewed / Approved By:</td><td colspan="3">${data.qaApprovedBy || ''}</td><td class="bold">Date:</td><td colspan="3">${data.qaApprovedDate || ''}</td></tr>
+        </table>
+      </body>
+      </html>
+      `;
+
+      const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `QA_Checklist_${data.productCoordinator || 'Evaluation'}.xls`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    window.onload = init;
+  </script>
+</body>
+</html>
