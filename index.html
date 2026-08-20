@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QA Checklist - Roadmap: New Games Release</title>
+  <title>QA Checklist - Real-time Collaborative</title>
   <style>
     * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     
@@ -28,19 +28,9 @@
       flex-wrap: wrap;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 15px;
-      font-weight: 600;
-      color: #f8fafc;
-      letter-spacing: 0.3px;
-    }
+    h1 { margin: 0; font-size: 15px; font-weight: 600; color: #f8fafc; letter-spacing: 0.3px; }
 
-    .header-controls {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
+    .header-controls { display: flex; align-items: center; gap: 10px; }
 
     .btn {
       background: #3b82f6;
@@ -64,9 +54,6 @@
     .btn-share { background: #8b5cf6; }
     .btn-share:hover { background: #7c3aed; }
 
-    .btn-danger { background: #ef4444; padding: 6px 10px; }
-    .btn-danger:hover { background: #dc2626; }
-
     .btn-today {
       background: #334155;
       color: #cbd5e1;
@@ -79,7 +66,6 @@
     }
     .btn-today:hover { background: #475569; color: #fff; }
 
-    /* Compact Buttons */
     .btn-sm {
       padding: 3px 8px;
       font-size: 10px;
@@ -89,17 +75,10 @@
       border: none;
       transition: background 0.2s;
     }
-    .btn-add {
-      background: #3b82f6;
-      color: #fff;
-    }
+    .btn-add { background: #3b82f6; color: #fff; }
     .btn-add:hover { background: #2563eb; }
 
-    .btn-del {
-      background: #ef4444;
-      color: #fff;
-      padding: 2px 6px;
-    }
+    .btn-del { background: #ef4444; color: #fff; padding: 2px 6px; }
     .btn-del:hover { background: #dc2626; }
 
     select, input[type="text"], input[type="number"], input[type="date"] {
@@ -113,30 +92,14 @@
       width: 100%;
     }
 
-    input[type="number"] {
-      -moz-appearance: textfield;
-    }
+    input[type="number"] { -moz-appearance: textfield; }
     input[type="number"]::-webkit-outer-spin-button,
-    input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-    input[type="date"] {
-      cursor: pointer;
-      color-scheme: dark;
-    }
+    input[type="date"] { cursor: pointer; color-scheme: dark; }
+    input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(1); cursor: pointer; padding: 2px; }
 
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      filter: invert(1);
-      cursor: pointer;
-      padding: 2px;
-    }
-
-    select:focus, input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 1px #3b82f6;
-    }
+    select:focus, input:focus { border-color: #3b82f6; box-shadow: 0 0 0 1px #3b82f6; }
 
     .select-history {
       width: 220px;
@@ -144,19 +107,9 @@
       border-color: #475569;
     }
 
-    .date-wrapper {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-    }
+    .date-wrapper { display: flex; gap: 6px; align-items: center; }
 
-    .content {
-      flex: 1;
-      padding: 16px;
-      max-width: 1100px;
-      margin: 0 auto;
-      width: 100%;
-    }
+    .content { flex: 1; padding: 16px; max-width: 1100px; margin: 0 auto; width: 100%; }
 
     .card {
       background: #1e293b;
@@ -206,9 +159,8 @@
     td.cell-passed { background-color: rgba(34, 197, 94, 0.25) !important; color: #4ade80; font-weight: bold; }
     td.cell-failed { background-color: rgba(239, 68, 68, 0.25) !important; color: #f87171; font-weight: bold; }
 
-    /* Issue Priority Row Styles */
+    /* Priority Rows */
     tr.issue-row { transition: background-color 0.3s ease; }
-
     tr.issue-low { background-color: rgba(34, 197, 94, 0.25) !important; }
     tr.issue-medium { background-color: rgba(251, 146, 60, 0.25) !important; }
     tr.issue-high { background-color: rgba(239, 68, 68, 0.3) !important; }
@@ -219,7 +171,6 @@
       100% { background-color: rgba(239, 68, 68, 0.65); }
     }
 
-    /* Score Box Layout */
     .score-box {
       background: #0f172a;
       border: 1px solid #334155;
@@ -231,7 +182,6 @@
       align-items: center;
     }
 
-    /* Pass/Fail Status Banner Text */
     .status-banner {
       font-size: 26px;
       font-weight: 900;
@@ -256,6 +206,15 @@
 
     .toast { font-size: 11px; color: #10b981; font-weight: 600; opacity: 0; transition: opacity 0.3s; }
     .toast.show { opacity: 1; }
+    
+    .sync-badge {
+      background: #10b981;
+      color: #0f172a;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -263,18 +222,18 @@
   <header>
     <div style="display: flex; align-items: center; gap: 12px;">
       <h1>QA Checklist</h1>
-      <span id="save-toast" class="toast">✓ Auto-saved</span>
+      <span class="sync-badge">🔴 LIVE SYNC</span>
+      <span id="save-toast" class="toast">✓ Synced</span>
     </div>
 
     <div class="header-controls">
       <label for="historySelect" style="font-size: 11px; color: #94a3b8;">Previous Evaluations:</label>
-      <select id="historySelect" class="select-history" onchange="loadEvaluation(this.value)">
+      <select id="historySelect" class="select-history" onchange="switchEvaluation(this.value)">
         <option value="">-- Select Product Coordinator --</option>
       </select>
 
-      <button class="btn" onclick="createNewEvaluation()">+ New</button>
-      <button class="btn btn-share" onclick="shareEvaluation()">🔗 Share Link</button>
-      <button class="btn btn-danger" onclick="deleteCurrentEvaluation()" title="Delete Current Evaluation">Delete</button>
+      <button class="btn btn-action" onclick="createNewEvaluation()">+ New</button>
+      <button class="btn btn-share" onclick="copyShareableLink()">🔗 Copy View-Only Link</button>
       <button class="btn btn-excel" onclick="exportToExcel()">📊 Export to Excel</button>
     </div>
   </header>
@@ -286,28 +245,28 @@
       <div class="grid-2">
         <div class="field-group">
           <label>Product Coordinator</label>
-          <input type="text" id="productCoordinator" placeholder="Enter coordinator name..." oninput="autoSave(); updateDropdownText();">
+          <input type="text" id="productCoordinator" placeholder="Enter coordinator name..." oninput="syncToFirebase()">
         </div>
         <div class="field-group">
           <label>QA Date</label>
           <div class="date-wrapper">
-            <input type="date" id="qaDate" onchange="autoSave()" onclick="openCalendar(this)">
-            <button class="btn-today" onclick="setToday('qaDate')">Today</button>
+            <input type="date" id="qaDate" onchange="syncToFirebase()" onclick="openCalendar(this)">
+            <button class="btn-today btn-action" onclick="setToday('qaDate')">Today</button>
           </div>
         </div>
         <div class="field-group">
           <label>Game Name</label>
-          <input type="text" id="gameName" placeholder="Enter game name..." oninput="autoSave()">
+          <input type="text" id="gameName" placeholder="Enter game name..." oninput="syncToFirebase()">
         </div>
         <div class="field-group">
           <label>Game ID / Game Name</label>
-          <input type="text" id="gameId" oninput="autoSave()">
+          <input type="text" id="gameId" oninput="syncToFirebase()">
         </div>
         <div class="field-group">
           <label>Release Date</label>
           <div class="date-wrapper">
-            <input type="date" id="releaseDate" onchange="autoSave()" onclick="openCalendar(this)">
-            <button class="btn-today" onclick="setToday('releaseDate')">Today</button>
+            <input type="date" id="releaseDate" onchange="syncToFirebase()" onclick="openCalendar(this)">
+            <button class="btn-today btn-action" onclick="setToday('releaseDate')">Today</button>
           </div>
         </div>
       </div>
@@ -322,7 +281,7 @@
       <!-- Section 1 -->
       <div class="section-header">
         <span>1. Game Information & Configuration (70% Weight Overall)</span>
-        <button class="btn-sm btn-add" onclick="addQaItemRow('sec1')">+ Add Item</button>
+        <button class="btn-sm btn-add btn-action" onclick="addQaItemRow('sec1')">+ Add Item</button>
       </div>
       <table>
         <thead>
@@ -342,7 +301,7 @@
       <!-- Section 2 -->
       <div class="section-header">
         <span>2. New Games Release (30% Weight Overall)</span>
-        <button class="btn-sm btn-add" onclick="addQaItemRow('sec2')">+ Add Item</button>
+        <button class="btn-sm btn-add btn-action" onclick="addQaItemRow('sec2')">+ Add Item</button>
       </div>
       <table>
         <thead>
@@ -359,14 +318,13 @@
         <tbody id="sec2-body"></tbody>
       </table>
 
-      <!-- Dynamic Scoring with PASSED! / FAILED! Banner -->
+      <!-- Dynamic Scoring -->
       <div class="score-box">
         <div>
           <strong style="color: #f8fafc;">Final QA Score Threshold:</strong> <span style="color: #94a3b8;">70.00% to Pass</span><br>
           <small style="color: #64748b;">Formula: Sec 1 (70% Weight) + Sec 2 (30% Weight)</small>
         </div>
 
-        <!-- Center Status Note -->
         <div id="status-text" class="status-banner fail-text">FAILED!</div>
 
         <div class="score-display score-failed" id="score-container">
@@ -377,7 +335,7 @@
       <!-- Issues Table -->
       <div class="section-header">
         <span>Issues / Corrective Actions</span>
-        <button class="btn-sm btn-add" onclick="addIssueRow()">+ Add Issue</button>
+        <button class="btn-sm btn-add btn-action" onclick="addIssueRow()">+ Add Issue</button>
       </div>
       <table>
         <thead>
@@ -397,26 +355,164 @@
       <div class="grid-2" style="margin-top: 20px;">
         <div class="field-group">
           <label>QA Completed By</label>
-          <input type="text" id="qaCompletedBy" placeholder="Evaluator Name" oninput="autoSave()" style="margin-bottom: 8px;">
+          <input type="text" id="qaCompletedBy" placeholder="Evaluator Name" oninput="syncToFirebase()" style="margin-bottom: 8px;">
           <label>Date Completed</label>
           <div class="date-wrapper">
-            <input type="date" id="qaCompletedDate" onchange="autoSave()" onclick="openCalendar(this)">
-            <button class="btn-today" onclick="setToday('qaCompletedDate')">Today</button>
+            <input type="date" id="qaCompletedDate" onchange="syncToFirebase()" onclick="openCalendar(this)">
+            <button class="btn-today btn-action" onclick="setToday('qaCompletedDate')">Today</button>
           </div>
         </div>
         <div class="field-group">
           <label>Reviewed / Approved By</label>
-          <input type="text" id="qaApprovedBy" placeholder="Approver Name" oninput="autoSave()" style="margin-bottom: 8px;">
+          <input type="text" id="qaApprovedBy" placeholder="Approver Name" oninput="syncToFirebase()" style="margin-bottom: 8px;">
           <label>Date Approved</label>
           <div class="date-wrapper">
-            <input type="date" id="qaApprovedDate" onchange="autoSave()" onclick="openCalendar(this)">
-            <button class="btn-today" onclick="setToday('qaApprovedDate')">Today</button>
+            <input type="date" id="qaApprovedDate" onchange="syncToFirebase()" onclick="openCalendar(this)">
+            <button class="btn-today btn-action" onclick="setToday('qaApprovedDate')">Today</button>
           </div>
         </div>
       </div>
 
     </div>
   </div>
+
+  <!-- FIREBASE INTEGRATION WITH PERMISSION CONTROLS -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getDatabase, ref, set, onValue, off } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKYnRgNDRPP6lXfyNJclqUHnWMmAIqUJ8",
+      authDomain: "qa-checklist-5f517.firebaseapp.com",
+      databaseURL: "https://qa-checklist-5f517-default-rtdb.firebaseio.com",
+      projectId: "qa-checklist-5f517",
+      storageBucket: "qa-checklist-5f517.firebasestorage.app",
+      messagingSenderId: "928963221024",
+      appId: "1:928963221024:web:5fc890ea0dddd89d6fce45",
+      measurementId: "G-86Y13EHE71"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getDatabase(app);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    let roomId = urlParams.get('id');
+    const canEdit = urlParams.get('edit') === 'true';
+
+    if (!roomId) {
+      roomId = 'qa_' + Math.random().toString(36).substring(2, 9);
+      window.history.replaceState({}, '', `?id=${roomId}&edit=true`);
+    }
+
+    let currentDocRef = null;
+    let indexRef = ref(db, 'evaluationsIndex');
+    let isRemoteUpdate = false;
+    let syncTimer = null;
+
+    function applyPermissionUi() {
+      if (!canEdit) {
+        document.querySelectorAll('input, select, .btn-action').forEach(el => {
+          if (!el.classList.contains('select-history')) {
+            el.disabled = true;
+            if (el.tagName === 'BUTTON') el.style.opacity = '0.5';
+          }
+        });
+        const badge = document.querySelector('.sync-badge');
+        if (badge) {
+          badge.innerText = '👁️ VIEW ONLY';
+          badge.style.background = '#64748b';
+          badge.style.color = '#fff';
+        }
+      }
+    }
+
+    function listenToRoom(newRoomId) {
+      if (currentDocRef) off(currentDocRef);
+      roomId = newRoomId;
+      currentDocRef = ref(db, 'checklists/' + roomId);
+      
+      onValue(currentDocRef, (snapshot) => {
+        const data = snapshot.val();
+        if (data && Object.keys(data).length > 0) {
+          const activeTag = document.activeElement ? document.activeElement.tagName : '';
+          if (activeTag === 'INPUT' || activeTag === 'SELECT') return;
+
+          isRemoteUpdate = true;
+          setFormData(data);
+          applyPermissionUi();
+          showSaveToast();
+          isRemoteUpdate = false;
+        } else {
+          setFormData({});
+          applyPermissionUi();
+        }
+      });
+    }
+
+    onValue(indexRef, (snapshot) => {
+      const data = snapshot.val();
+      renderDropdown(data || {});
+    });
+
+    listenToRoom(roomId);
+
+    window.syncToFirebase = function() {
+      if (isRemoteUpdate || !currentDocRef || !canEdit) return;
+      
+      clearTimeout(syncTimer);
+      syncTimer = setTimeout(() => {
+        const data = getFormData();
+        set(currentDocRef, data);
+        
+        const coordinator = data.productCoordinator || 'Untitled Coordinator';
+        const dateStr = data.updatedAt || new Date().toLocaleDateString();
+        set(ref(db, `evaluationsIndex/${roomId}`), {
+          id: roomId,
+          productCoordinator: coordinator,
+          updatedAt: dateStr
+        });
+
+        showSaveToast();
+      }, 400); 
+    };
+
+    window.switchEvaluation = function(selectedRoomId) {
+      if (!selectedRoomId) return;
+      const editParam = canEdit ? '&edit=true' : '';
+      window.history.pushState({}, '', `?id=${selectedRoomId}${editParam}`);
+      listenToRoom(selectedRoomId);
+    };
+
+    window.createNewEvaluation = function() {
+      if (!canEdit) return;
+      const newRoomId = 'qa_' + Math.random().toString(36).substring(2, 9);
+      window.history.pushState({}, '', `?id=${newRoomId}&edit=true`);
+      listenToRoom(newRoomId);
+      setFormData({});
+      window.syncToFirebase();
+    };
+
+    window.copyShareableLink = function() {
+      const viewUrl = `${window.location.origin}${window.location.pathname}?id=${roomId}`;
+      navigator.clipboard.writeText(viewUrl).then(() => {
+        alert('🔗 View-Only Share Link Copied!\nAnyone opening this link can view real-time edits but CANNOT make changes.');
+      });
+    };
+
+    function renderDropdown(indexData) {
+      const select = document.getElementById('historySelect');
+      select.innerHTML = '<option value="">-- Select Product Coordinator --</option>';
+      
+      Object.keys(indexData).reverse().forEach(id => {
+        const item = indexData[id];
+        const opt = document.createElement('option');
+        opt.value = item.id;
+        opt.innerText = `${item.productCoordinator || 'Untitled Coordinator'} (${item.updatedAt || ''})`;
+        if (item.id === roomId) opt.selected = true;
+        select.appendChild(opt);
+      });
+    }
+  </script>
 
   <script>
     const defaultSec1Items = [
@@ -439,35 +535,8 @@
       { id: 's2_4', text: 'Added to Categories', weight: 10 }
     ];
 
-    let currentId = null;
-    let evaluations = {};
     let issueCounter = 0;
     let qaItemCounter = 0;
-
-    function init() {
-      loadFromStorage();
-      
-      // Check for Shared URL Hash
-      if (window.location.hash.startsWith('#data=')) {
-        try {
-          const encoded = window.location.hash.replace('#data=', '');
-          const data = JSON.parse(decodeURIComponent(atob(encoded)));
-          currentId = 'eval_' + Date.now();
-          evaluations[currentId] = data;
-          saveToStorage();
-          window.location.hash = ''; // Clear Hash
-        } catch(e) {
-          console.error("Failed to parse share URL data", e);
-        }
-      }
-
-      if (Object.keys(evaluations).length === 0) {
-        createNewEvaluation();
-      } else {
-        currentId = Object.keys(evaluations)[0];
-        loadEvaluation(currentId);
-      }
-    }
 
     function openCalendar(inputEl) {
       if ('showPicker' in HTMLInputElement.prototype) {
@@ -479,10 +548,9 @@
       const today = new Date().toISOString().split('T')[0];
       const field = document.getElementById(fieldId);
       field.value = today;
-      autoSave();
+      window.syncToFirebase();
     }
 
-    /* --- EDITABLE QA ITEMS logic --- */
     function addQaItemRow(section, item = {}) {
       qaItemCounter++;
       const id = item.id || `${section}_custom_${qaItemCounter}`;
@@ -494,37 +562,32 @@
       tr.setAttribute('data-id', id);
 
       tr.innerHTML = `
-        <td>
-          <input type="text" id="text_${id}" value="${item.text || 'New QA Item'}" oninput="autoSave()">
-        </td>
-        <td>
-          <input type="number" id="weight_${id}" step="0.5" min="0" value="${item.weight !== undefined ? item.weight : 5}" oninput="autoSave()">
-        </td>
+        <td><input type="text" id="text_${id}" value="${item.text || 'New QA Item'}" oninput="window.syncToFirebase()"></td>
+        <td><input type="number" id="weight_${id}" step="0.5" min="0" value="${item.weight !== undefined ? item.weight : 5}" oninput="window.syncToFirebase()"></td>
         <td class="radio-cell" id="cell_passed_${id}">
-          <input type="radio" name="${id}" value="passed" ${item.status === 'passed' ? 'checked' : ''} onchange="handleStatusChange('${id}'); autoSave();">
+          <input type="radio" name="${id}" value="passed" ${item.status === 'passed' ? 'checked' : ''} onchange="handleStatusChange('${id}'); window.syncToFirebase();">
         </td>
         <td class="radio-cell" id="cell_failed_${id}">
-          <input type="radio" name="${id}" value="failed" ${item.status === 'failed' ? 'checked' : ''} onchange="handleStatusChange('${id}'); autoSave();">
+          <input type="radio" name="${id}" value="failed" ${item.status === 'failed' ? 'checked' : ''} onchange="handleStatusChange('${id}'); window.syncToFirebase();">
         </td>
         <td class="radio-cell" id="cell_na_${id}">
-          <input type="radio" name="${id}" value="na" ${item.status === 'na' ? 'checked' : ''} onchange="handleStatusChange('${id}'); autoSave();">
+          <input type="radio" name="${id}" value="na" ${item.status === 'na' ? 'checked' : ''} onchange="handleStatusChange('${id}'); window.syncToFirebase();">
         </td>
-        <td><input type="text" id="${id}_notes" value="${item.notes || ''}" oninput="autoSave()"></td>
+        <td><input type="text" id="${id}_notes" value="${item.notes || ''}" oninput="window.syncToFirebase()"></td>
         <td style="text-align: center;">
-          <button class="btn-sm btn-del" onclick="removeQaItemRow('${id}')" title="Delete Row">✕</button>
+          <button class="btn-sm btn-del btn-action" onclick="removeQaItemRow('${id}')" title="Delete Row">✕</button>
         </td>
       `;
 
       container.appendChild(tr);
       handleStatusChange(id);
-      autoSave();
     }
 
     function removeQaItemRow(id) {
       const row = document.getElementById(`row_${id}`);
       if (row) {
         row.remove();
-        autoSave();
+        window.syncToFirebase();
       }
     }
 
@@ -551,7 +614,6 @@
       }
     }
 
-    /* --- ISSUE DYNAMIC ROWS & STYLING --- */
     function addIssueRow(data = {}) {
       issueCounter++;
       const id = issueCounter;
@@ -561,9 +623,9 @@
       tr.id = `issue-row-${id}`;
       tr.className = 'issue-row';
       tr.innerHTML = `
-        <td><input type="text" class="issue-field" data-id="${id}" data-type="issue" value="${data.issue || ''}" oninput="autoSave()"></td>
+        <td><input type="text" class="issue-field" data-id="${id}" data-type="issue" value="${data.issue || ''}" oninput="window.syncToFirebase()"></td>
         <td>
-          <select id="prio_${id}" class="issue-field" data-id="${id}" data-type="prio" onchange="updateIssueRowStyle(${id}); autoSave();">
+          <select id="prio_${id}" class="issue-field" data-id="${id}" data-type="prio" onchange="updateIssueRowStyle(${id}); window.syncToFirebase();">
             <option value="">- Select -</option>
             <option ${data.prio === 'Low' ? 'selected' : ''}>Low</option>
             <option ${data.prio === 'Medium' ? 'selected' : ''}>Medium</option>
@@ -571,10 +633,10 @@
             <option ${data.prio === 'Critical' ? 'selected' : ''}>Critical</option>
           </select>
         </td>
-        <td><input type="text" class="issue-field" data-id="${id}" data-type="owner" value="${data.owner || ''}" oninput="autoSave()"></td>
-        <td><input type="text" class="issue-field" data-id="${id}" data-type="action" value="${data.action || ''}" oninput="autoSave()"></td>
+        <td><input type="text" class="issue-field" data-id="${id}" data-type="owner" value="${data.owner || ''}" oninput="window.syncToFirebase()"></td>
+        <td><input type="text" class="issue-field" data-id="${id}" data-type="action" value="${data.action || ''}" oninput="window.syncToFirebase()"></td>
         <td>
-          <select id="status_${id}" class="issue-field" data-id="${id}" data-type="status" onchange="updateIssueRowStyle(${id}); autoSave();">
+          <select id="status_${id}" class="issue-field" data-id="${id}" data-type="status" onchange="updateIssueRowStyle(${id}); window.syncToFirebase();">
             <option value="">- Select -</option>
             <option ${data.status === 'Open' ? 'selected' : ''}>Open</option>
             <option ${data.status === 'In Progress' ? 'selected' : ''}>In Progress</option>
@@ -582,7 +644,7 @@
           </select>
         </td>
         <td style="text-align: center;">
-          <button class="btn-sm btn-del" onclick="removeIssueRow(${id})" title="Delete Issue">✕</button>
+          <button class="btn-sm btn-del btn-action" onclick="removeIssueRow(${id})" title="Delete Issue">✕</button>
         </td>
       `;
       tbody.appendChild(tr);
@@ -593,7 +655,7 @@
       const row = document.getElementById(`issue-row-${id}`);
       if (row) {
         row.remove();
-        autoSave();
+        window.syncToFirebase();
       }
     }
 
@@ -609,9 +671,7 @@
 
       row.classList.remove('issue-low', 'issue-medium', 'issue-high', 'issue-critical');
 
-      if (status === 'Resolved' || !priority) {
-        return;
-      }
+      if (status === 'Resolved' || !priority) return;
 
       if (priority === 'Low') row.classList.add('issue-low');
       else if (priority === 'Medium') row.classList.add('issue-medium');
@@ -693,19 +753,13 @@
           const selected = document.querySelector(`input[name="${id}"]:checked`);
           
           data[`${section}Items`].push({
-            id,
-            text,
-            weight,
-            status: selected ? selected.value : null,
-            notes
+            id, text, weight, status: selected ? selected.value : null, notes
           });
         });
       });
 
-      // Collect Issue Rows
       const issueRows = document.querySelectorAll('#issues-body tr');
       issueRows.forEach(tr => {
-        const id = tr.id.replace('issue-row-', '');
         const issue = tr.querySelector(`[data-type="issue"]`).value;
         const prio = tr.querySelector(`[data-type="prio"]`).value;
         const owner = tr.querySelector(`[data-type="owner"]`).value;
@@ -731,7 +785,6 @@
       document.getElementById('qaApprovedBy').value = data.qaApprovedBy || '';
       document.getElementById('qaApprovedDate').value = data.qaApprovedDate || '';
 
-      // Render Section 1 & Section 2
       document.getElementById('sec1-body').innerHTML = '';
       document.getElementById('sec2-body').innerHTML = '';
 
@@ -741,7 +794,6 @@
       sec1.forEach(item => addQaItemRow('sec1', item));
       sec2.forEach(item => addQaItemRow('sec2', item));
 
-      // Render Issues
       document.getElementById('issues-body').innerHTML = '';
       issueCounter = 0;
       if (data.issuesList && data.issuesList.length > 0) {
@@ -753,93 +805,11 @@
       calculateScore();
     }
 
-    function autoSave() {
-      if (!currentId) return;
-      evaluations[currentId] = getFormData();
-      saveToStorage();
-      calculateScore();
-      showSaveToast();
-    }
-
-    function createNewEvaluation() {
-      currentId = 'eval_' + Date.now();
-      evaluations[currentId] = {
-        productCoordinator: 'New Coordinator',
-        updatedAt: new Date().toLocaleDateString()
-      };
-      setFormData({});
-      autoSave();
-      renderDropdown();
-    }
-
-    function loadEvaluation(id) {
-      if (!id) return;
-      currentId = id;
-      setFormData(evaluations[id]);
-      renderDropdown();
-    }
-
-    function deleteCurrentEvaluation() {
-      if (!currentId) return;
-      if (confirm('Are you sure you want to delete this evaluation?')) {
-        delete evaluations[currentId];
-        saveToStorage();
-        const keys = Object.keys(evaluations);
-        if (keys.length > 0) {
-          loadEvaluation(keys[0]);
-        } else {
-          createNewEvaluation();
-        }
-      }
-    }
-
-    function shareEvaluation() {
-      const data = getFormData();
-      const jsonString = JSON.stringify(data);
-      const encoded = btoa(encodeURIComponent(jsonString));
-      const shareableUrl = `${window.location.origin}${window.location.pathname}#data=${encoded}`;
-
-      navigator.clipboard.writeText(shareableUrl).then(() => {
-        alert('🔗 Shareable link copied to clipboard!\nAnyone with this link can view and edit this checklist state.');
-      }).catch(err => {
-        prompt('Copy this shareable link:', shareableUrl);
-      });
-    }
-
-    function renderDropdown() {
-      const select = document.getElementById('historySelect');
-      select.innerHTML = '<option value="">-- Select Product Coordinator --</option>';
-      
-      Object.keys(evaluations).reverse().forEach(id => {
-        const item = evaluations[id];
-        const opt = document.createElement('option');
-        opt.value = id;
-        opt.innerText = `${item.productCoordinator || 'Untitled Coordinator'} (${item.updatedAt || ''})`;
-        if (id === currentId) opt.selected = true;
-        select.appendChild(opt);
-      });
-    }
-
-    function updateDropdownText() {
-      renderDropdown();
-    }
-
     function showSaveToast() {
       const toast = document.getElementById('save-toast');
       toast.classList.add('show');
       clearTimeout(window.toastTimer);
       window.toastTimer = setTimeout(() => toast.classList.remove('show'), 1200);
-    }
-
-    function saveToStorage() {
-      localStorage.setItem('qa_evaluations_db_dark', JSON.stringify(evaluations));
-    }
-
-    function loadFromStorage() {
-      const stored = localStorage.getItem('qa_evaluations_db_dark');
-      if (stored) {
-        try { evaluations = JSON.parse(stored); } catch(e) { evaluations = {}; }
-      }
     }
 
     function exportToExcel() {
@@ -1006,8 +976,6 @@
       link.click();
       document.body.removeChild(link);
     }
-
-    window.onload = init;
   </script>
 </body>
 </html>
